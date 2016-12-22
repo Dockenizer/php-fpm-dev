@@ -1,8 +1,9 @@
 FROM dockenizer/php-fpm
 MAINTAINER Jacques Moati <jacques@moati.net>
 
-RUN apk --update \
-        --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
-        add php7-xdebug
+RUN apk --update add make g++ autoconf && \
+    pecl install xdebug && \
+    docker-php-ext-enable xdebug && \
 
-CMD /run.sh
+    apk del --purge make g++ autoconf libtool && \
+    rm -rf /var/cache/apk/*
